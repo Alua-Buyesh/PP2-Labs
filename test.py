@@ -1,1 +1,1 @@
-print("hui v jope")
+print("love cat")
