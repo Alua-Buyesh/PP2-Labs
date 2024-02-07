@@ -7,13 +7,14 @@ class Point():
         print(str(self.x)+";"+str(self.y))
 
     def move(self):
-        self.x=int(input("Change x: "))
-        self.y=int(input("Change y: "))
+        global x, y
+        x=int(input("Change x: "))
+        y=int(input("Change y: "))
 
     def dist(self):
-        c=self.x - self.y
-        if c <0:
-            c=-c
+        self.r=int(input("From x:"))
+        self.t=int(input("From y:"))
+        c=((self.x-self.r)**2 + (self.y-self.t)**2)**0.5
 
         return c
 
@@ -23,7 +24,6 @@ y=9
 point = Point(x,y)
 point.show()
 point.move()
-print(point.x,point.y)
+print(x,y)
 res=point.dist()
 print(res)
-
