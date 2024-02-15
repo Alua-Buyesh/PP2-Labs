@@ -1,5 +1,5 @@
 import datetime
 
 x=datetime.datetime.now()
-y=int(x.strftime("%d"))-5
+y=x-datetime.timedelta(days=5)
 print(y)
