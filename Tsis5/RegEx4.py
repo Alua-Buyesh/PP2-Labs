@@ -1,7 +1,7 @@
 import re
 
 def ch(t):
-    p = r'[A-Z][a-z]+'
+    p ='[A-Z][a-z]+'
     m=re.findall(p,t)
     return m
 

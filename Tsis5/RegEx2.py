@@ -1,11 +1,11 @@
 import re
 def ch(a,b):
-    return bool(re.fullmatch(a,b))
+    return bool(re.search(a,b))
 
-a=r"abb|abbb"
+a="ab{2}$|ab{3}$"
 test=["abbbbbbb", "abb","hbnmvjb","abbb"]
 for i in test:
     if ch(a,i):
-        print("match")
+        print(f"'{i}' match")
     else:
-        print("not match")
+        print(f"'{i}'not match")

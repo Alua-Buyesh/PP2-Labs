@@ -1,7 +1,7 @@
 import re
 
 def rep(t):
-    p = r'[ ,.]'
+    p = '[ ,.]'
     res = re.sub(p, ':', t)
     return res
 

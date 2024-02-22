@@ -1,7 +1,7 @@
 import re
 
 def find_sequences(text):
-    pattern = r'[a-z_]+[a-z]'
+    pattern ='[a-z_]+[a-z]'
     matches = re.findall(pattern, text)
     return matches
 

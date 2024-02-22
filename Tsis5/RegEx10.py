@@ -1,8 +1,9 @@
 import re
 
 def ch(t):
-    p = r'([A-Z])'
-    z = re.sub(p, r'_\1', t).lower()
+    p = '([A-Z])'
+    c=lambda m: "_"+m.group(0).lower()
+    z = re.sub(p,c, t)
     return z
 
 t = "awesomeSushkiFromBabushka"

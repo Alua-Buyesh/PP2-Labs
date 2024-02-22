@@ -1,8 +1,8 @@
 import re
 def s(a,b):
-    return bool(re.fullmatch(a,b))
+    return bool(re.search(a,b))
 
-a="ab*"
+a="ab+"
 t = ["a", "ab", "abb", "abbb", "ac", "bc", "b"]
 for b in t:
     if s(a,b):
