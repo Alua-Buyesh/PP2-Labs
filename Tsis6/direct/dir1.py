@@ -1,12 +1,12 @@
 import os
 
-def list_directories_files(path):
-    directories = [d for d in os.listdir(path) if os.path.isdir(os.path.join(path, d))]
-    files = [f for f in os.listdir(path) if os.path.isfile(os.path.join(path, f))]
+def list_directories_files(way):
+    directories = [d for d in os.listdir(way) if os.path.isdir(os.path.join(way, d))]
+    files = [f for f in os.listdir(way) if os.path.isfile(os.path.join(way, f))]
     return directories, files
 
-path = "/Users/admin/Desktop/Books"
-directories, files = list_directories_files(path)
+way = "/Users/admin/Desktop/Books"
+directories, files = list_directories_files(way)
 
 print("Directories:")
 for directory in directories:
