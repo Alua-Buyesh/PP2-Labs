@@ -1,7 +1,5 @@
 import os
 
-import os
-
 def l(way):
     directories = []
     files = []
