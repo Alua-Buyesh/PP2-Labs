@@ -10,15 +10,15 @@ main_clock = pygame.image.load("mainclock.png")
 minute_hand = pygame.image.load(("rightarm.png")) 
 second_hand = pygame.image.load(("leftarm.png")) 
 main_clock = pygame.transform.scale(main_clock, (500, 400)) 
-minute_hand = pygame.transform.scale(minute_hand, (500, 450)) 
-second_hand = pygame.transform.scale(second_hand, (50, 480)) 
+minute_hand = pygame.transform.scale(minute_hand, (500, 500)) 
+second_hand = pygame.transform.scale(second_hand, (45, 500)) 
  
 while running: 
     for event in pygame.event.get(): 
         if event.type == pygame.QUIT: 
             running = False 
  
-    screen.fill((255, 255, 255)) 
+    screen.fill((0, 255, 255)) 
     current_time = datetime.datetime.now() 
  
     minute_angle = current_time.minute * 6 * -1 
