@@ -6,14 +6,14 @@ from pygame.locals import *
 pygame.init()
 
 snake_speed = 5
-
+my_font = pygame.font.SysFont('Verdana', 80)
 window_x = 600
 window_y = 600
 
 black = (0, 0, 0)
 white = (255, 255, 255)
 red = pygame.Color(255, 0, 0)
-
+wall_rect = pygame.Rect(100, 100, 20, 200)
 
 pygame.display.set_caption('Snake')
 game_window = pygame.display.set_mode((window_x, window_y))
@@ -30,29 +30,59 @@ fruit_spawn = True
 direction = 'RIGHT'
 change_to = direction
 
+f_score=0
 score = 0
+level =0
 
-def show_score(choice, color, font, size):
+P = True
+def level1():
+		global P
+		global snake_body
+		game_window.fill(black)
+		game_over_surface_l = my_font.render(
+		'level: ' + str(level), True, white)
+		game_window.blit(game_over_surface_l,(180,300))
+		P= False
+		pygame.display.update()
+		time.sleep(2)
+		
+def show_score(color, font, size):
 	score_font = pygame.font.SysFont(font, size)
-	score_surface = score_font.render('Score : ' + str(score), True, color)
+	score_surface = score_font.render('Score : ' + str(max(f_score, score)), True, color)
 	score_rect = score_surface.get_rect()
 	game_window.blit(score_surface, score_rect)
 
+def show_level(color, font, size):
+	score_font = pygame.font.SysFont(font, size)
+	score_surface = score_font.render('Level : ' + str(level), True, color)
+	score_rect = score_surface.get_rect()
+	game_window.blit(score_surface, (0, 20))
+
 def game_over():
 
-	my_font = pygame.font.SysFont('Verdana', 80)
+	
 	game_window.fill(black)
 	game_over_surface = my_font.render(
-		'Score: ' + str(score), True, white)
+		'Score: ' + str(f_score), True, white)
+	game_over_surface_l = my_font.render(
+		'level: ' + str(level), True, white)
 	game_over_rect = game_over_surface.get_rect()
-	game_over_rect.midtop = (window_x/2, window_y/2)
+	game_over_rect.midtop = (window_x/2, window_y/3)
 	game_window.blit(game_over_surface, game_over_rect)
+	game_window.blit(game_over_surface_l, (180, 300))
 	pygame.display.flip()
 	time.sleep(2)
 	pygame.quit()
 	quit()
 
 while True:
+	if score==2:
+		level+=1
+		f_score+=score
+		score=0
+
+	
+
 	for event in pygame.event.get():
 		if event.type == QUIT:
 			pygame.quit()
@@ -97,10 +127,15 @@ while True:
 		
 	fruit_spawn = True
 	game_window.fill(black)
-	
+	if level==1:
+		if P:
+			level1()
+		
+		pygame.draw.rect(game_window, white, wall_rect)
+		if snake_position[0] == wall_rect.x and snake_position[1] >= wall_rect.y and snake_position[1] <= wall_rect.y + wall_rect.height:
+			game_over()
 	for pos in snake_body:
-		pygame.draw.rect(game_window, white,
-						pygame.Rect(pos[0], pos[1], 20, 20))
+		pygame.draw.rect(game_window, white,pygame.Rect(pos[0], pos[1], 20, 20))
 	pygame.draw.rect(game_window, red, pygame.Rect(
 		fruit_position[0], fruit_position[1], 20, 20))
 
@@ -113,7 +148,8 @@ while True:
 		if snake_position[0] == block[0] and snake_position[1] == block[1]:
 			game_over()
 
-	show_score(1, white, 'Verdana', 20)
+	show_score(white, 'Verdana', 20)
+	show_level(white, 'Verdana', 20)
 
 	pygame.display.update()
 
