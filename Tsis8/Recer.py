@@ -26,7 +26,7 @@ background = pygame.image.load("Music and png/AnimatedStreet.png")
 
 DISPLAYSURF = pygame.display.set_mode((400, 600))
 DISPLAYSURF.fill(WHITE)
-pygame.display.set_caption("Game")
+pygame.display.set_caption("CARS")
 
 
 class Money(pygame.sprite.Sprite):
@@ -44,7 +44,7 @@ class Money(pygame.sprite.Sprite):
             self.reset_position() 
             self.rect.top = 0
             self.rect.center = (random.randint(40, SCREEN_WIDTH - 40), 0)
-            
+
     def reset_position(self):
         while True:
             self.rect.center = (random.randint(40, SCREEN_WIDTH - 40), 0)
