@@ -3,6 +3,7 @@ from pygame.locals import *
 
 pygame.init()
 
+
 FPS = 60
 FramePerSec = pygame.time.Clock()
 
@@ -26,30 +27,39 @@ DISPLAYSURF = pygame.display.set_mode((400, 600))
 DISPLAYSURF.fill(WHITE)
 pygame.display.set_caption("CARS")
 
+
 #создать персонажей
-class Money(pygame.sprite.Sprite):
+class Money1(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
         a = pygame.image.load("Music and png/coin.png")
         self.image = pygame.transform.scale(a, (50, 50))
         self.rect = self.image.get_rect()
         self.rect.center = (random.randint(40, SCREEN_WIDTH - 40), 0)
-        if E1 and self.rect.colliderect(E1.rect):
-            return Money()
 
     def move(self):
         global COINS
         self.rect.move_ip(0, SPEED)
         if (self.rect.top > 600):
-            self.reset_position() 
             self.rect.top = 0
             self.rect.center = (random.randint(40, SCREEN_WIDTH - 40), 0)
 
-    def reset_position(self):
-        while True:
+    
+            
+class Money2(pygame.sprite.Sprite):
+    def __init__(self):
+        super().__init__()
+        a = pygame.image.load("Music and png/vecteezy_red-dish-mockup-png-plate_8492307.png")
+        self.image = pygame.transform.scale(a, (50, 50))
+        self.rect = self.image.get_rect()
+        self.rect.center = (random.randint(40, SCREEN_WIDTH - 40), 0)
+
+    def move(self):
+        global COINS
+        self.rect.move_ip(0, SPEED)
+        if (self.rect.top > 600):
+            self.rect.top = 0
             self.rect.center = (random.randint(40, SCREEN_WIDTH - 40), 0)
-            if not pygame.sprite.spritecollideany(self, enemies):
-                break
 
 
 
@@ -90,22 +100,26 @@ class Player(pygame.sprite.Sprite):
             if pressed_keys[K_RIGHT]:
                 self.rect.move_ip(5, 0)
 
-
 P1 = Player()
 E1 = Enemy()
-M1 = Money()
+enemies = pygame.sprite.Group()
+M1 = Money1()
+M2 = Money2()
+
 
 #добавить их как один единый организм
-enemies = pygame.sprite.Group()
 enemies.add(E1)
 
-coin_group = pygame.sprite.Group()
-coin_group.add(M1)
+coin_group1 = pygame.sprite.Group()
+coin_group1.add(M1)
+coin_group2 = pygame.sprite.Group()
+coin_group2.add(M2)
 
 all_sprites = pygame.sprite.Group()
 all_sprites.add(P1)
 all_sprites.add(E1)
-all_sprites.add(coin_group)
+all_sprites.add(coin_group1)
+all_sprites.add(coin_group2)
 
 INC_SPEED = pygame.USEREVENT + 1
 pygame.time.set_timer(INC_SPEED, 6000)
@@ -141,15 +155,25 @@ while True:
             time.sleep(3)
             pygame.quit()
         #если игрок столкнется с монеткой
-        if pygame.sprite.spritecollideany(P1, coin_group):
-            collided_coin = pygame.sprite.spritecollideany(P1, coin_group)
-            collided_coin.reset_position()
+        if pygame.sprite.spritecollideany(P1, coin_group1):
+            collided_coin = pygame.sprite.spritecollideany(P1, coin_group1)
             collided_coin.kill()
             COINS += 1
             pygame.display.update()
-            new_coin = Money()
-            coin_group.add(new_coin)
-            all_sprites.add(new_coin)
+            if not any(isinstance(sprite, Money1) for sprite in coin_group1):
+                new_coin = Money1() 
+                coin_group1.add(new_coin)
+                all_sprites.add(new_coin)
+
+        if pygame.sprite.spritecollideany(P1, coin_group2):
+            collided_coin = pygame.sprite.spritecollideany(P1, coin_group2)
+            collided_coin.kill()
+            COINS += 5
+            pygame.display.update()
+            if not any(isinstance(sprite, Money2) for sprite in coin_group2):
+                new_coin = Money2() 
+                coin_group2.add(new_coin)
+                all_sprites.add(new_coin)
 
             
 

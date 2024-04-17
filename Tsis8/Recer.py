@@ -41,15 +41,9 @@ class Money(pygame.sprite.Sprite):
         global COINS
         self.rect.move_ip(0, SPEED)
         if (self.rect.top > 600):
-            self.reset_position() 
             self.rect.top = 0
             self.rect.center = (random.randint(40, SCREEN_WIDTH - 40), 0)
 
-    def reset_position(self):
-        while True:
-            self.rect.center = (random.randint(40, SCREEN_WIDTH - 40), 0)
-            if not pygame.sprite.spritecollideany(self, enemies):
-                break
 
 
 
@@ -89,6 +83,12 @@ class Player(pygame.sprite.Sprite):
         if self.rect.right < SCREEN_WIDTH:
             if pressed_keys[K_RIGHT]:
                 self.rect.move_ip(5, 0)
+
+    def collect_coin(self, coin_group):
+        collisions = pygame.sprite.spritecollide(self, coin_group, True)
+        for coin_group in collisions:
+            return True
+        return False
 
 
 P1 = Player()
@@ -141,12 +141,8 @@ while True:
             time.sleep(3)
             pygame.quit()
         #если игрок столкнется с монеткой
-        if pygame.sprite.spritecollideany(P1, coin_group):
-            collided_coin = pygame.sprite.spritecollideany(P1, coin_group)
-            collided_coin.reset_position()
-            collided_coin.kill()
+        if P1.collect_coin(coin_group):
             COINS += 1
-            pygame.display.update()
             new_coin = Money()
             coin_group.add(new_coin)
             all_sprites.add(new_coin)
