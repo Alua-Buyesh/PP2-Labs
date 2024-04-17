@@ -16,6 +16,7 @@ SPEED = 5
 SCORE = 0
 COINS = 0
 
+P = True
 #Делаю шаблон для шрифторв
 font = pygame.font.SysFont("Verdana", 60)
 font_small = pygame.font.SysFont("Verdana", 20)
@@ -130,6 +131,12 @@ while True:
             SPEED += 1
         if event.type == QUIT:
             pygame.quit()
+    if COINS!=0 and COINS%20==0:
+        if P:
+            SPEED=+1
+            P=False
+    if COINS!=1 and COINS%20==1:
+        P=True
 
     #добавляет в левый угол счетчики
     DISPLAYSURF.blit(background, (0, 0))
@@ -159,7 +166,7 @@ while True:
             collided_coin = pygame.sprite.spritecollideany(P1, coin_group1)
             collided_coin.kill()
             COINS += 1
-            pygame.display.update()
+            pygame.display.flip()
             if not any(isinstance(sprite, Money1) for sprite in coin_group1):
                 new_coin = Money1() 
                 coin_group1.add(new_coin)
@@ -169,7 +176,7 @@ while True:
             collided_coin = pygame.sprite.spritecollideany(P1, coin_group2)
             collided_coin.kill()
             COINS += 5
-            pygame.display.update()
+            pygame.display.flip()
             if not any(isinstance(sprite, Money2) for sprite in coin_group2):
                 new_coin = Money2() 
                 coin_group2.add(new_coin)

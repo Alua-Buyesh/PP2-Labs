@@ -13,6 +13,7 @@ window_y = 600
 black = (0, 0, 0)
 white = (255, 255, 255)
 red = (255, 0, 0)
+yellow = (255, 255, 0)
 
 wall_rect1 = pygame.Rect(100, 100, 20, 200)
 wall_rect2 = pygame.Rect(500, 100, 20, 200)
@@ -22,13 +23,17 @@ pygame.display.set_caption('Snake')
 game_window = pygame.display.set_mode((window_x, window_y))
 
 fps = pygame.time.Clock()
+FOOD_TIMER1 = 48
+FOOD_TIMER2 = 25
 
 snake_position = [300,300]
 
 snake_body = [[300, 300],[280, 300],[260, 300],[240, 300]]
 fruit_position = [random.randrange(1, (window_x//20)) * 20, random.randrange(1, (window_y//20)) * 20]
+apple = [random.randrange(1, (window_x//20)) * 20, random.randrange(1, (window_y//20)) * 20]
 
 fruit_spawn = True
+apple_spawn = True
 
 direction = 'RIGHT'
 change_to = direction
@@ -76,8 +81,9 @@ def game_over():
 	pygame.quit()
 	quit()
 
+
 while True:
-	if score==2:
+	if score>=20:
 		P= True
 		level+=1
 		f_score+=score
@@ -119,17 +125,35 @@ while True:
 		
 	snake_body.insert(0, list(snake_position))
 	if snake_position[0] == fruit_position[0] and snake_position[1]==fruit_position[1]:
-		score += 1
+		score += 5
 		fruit_spawn = False
+	if snake_position[0] == apple[0] and snake_position[1]==apple[1]:
+		score += 1
+		apple_spawn = False
 	else:
 		snake_body.pop()
-		
+	
+	FOOD_TIMER1-=1
+	if FOOD_TIMER1 == 0:
+		game_window.fill(black)
+		apple_spawn = False
+		FOOD_TIMER1 = 48
+
+	FOOD_TIMER2-=1
+	if FOOD_TIMER2 == 0:
+		game_window.fill(black)
+		fruit_spawn = False
+		FOOD_TIMER2 = 25
+
 	if not fruit_spawn:
 		fruit_position = [random.randrange(1, (window_x//20)) * 20, random.randrange(1, (window_y//20)) * 20]
 		
-	fruit_spawn = True
-	game_window.fill(black)
+	if not apple_spawn:
+		apple = [random.randrange(1, (window_x//20)) * 20, random.randrange(1, (window_y//20)) * 20]
 
+	fruit_spawn = True
+	apple_spawn = True
+	game_window.fill(black)
 
 	if level==1:
 		if P:
@@ -171,7 +195,8 @@ while True:
 
 	for pos in snake_body:
 		pygame.draw.rect(game_window, white,pygame.Rect(pos[0], pos[1], 20, 20))
-	pygame.draw.rect(game_window, red, pygame.Rect(fruit_position[0], fruit_position[1], 20, 20))
+	pygame.draw.rect(game_window, red, pygame.Rect(apple[0], apple[1], 20, 20))
+	pygame.draw.rect(game_window, yellow, pygame.Rect(fruit_position[0], fruit_position[1], 20, 20))
 
 	if snake_position[0] < 0 or snake_position[0] > window_x-20:
 		game_over()
