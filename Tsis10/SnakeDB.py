@@ -29,7 +29,7 @@ def create_tables(conn):
             );
             CREATE TABLE IF NOT EXISTS user_score (
                 id SERIAL PRIMARY KEY,
-                username TEXT,
+                username VARCHAR(30),
                 user_id INT REFERENCES users(id),
                 score INT,
                 level INT
@@ -48,7 +48,7 @@ def register_or_get_user(conn):
         user = cur.fetchone()
         if user:
             print(f"Welcome back, {username}!")
-            return user[0]  # Return user id
+            return user[0] 
         else:
             cur.execute("INSERT INTO users (username) VALUES (%s) RETURNING id", (username,))
             user_id = cur.fetchone()[0]
@@ -56,7 +56,7 @@ def register_or_get_user(conn):
             print(f"Welcome, {username}! You're a new player.")
             return user_id
     except psycopg2.Error as e:
-        conn.rollback()  # Rollback transaction in case of error
+        conn.rollback() 
         print("Error registering user:", e)
         return None
 
@@ -80,14 +80,14 @@ def save_game_state(conn, username, user_id, score):
         conn.commit()
         print("Game state saved successfully.")
     except psycopg2.Error as e:
-        conn.rollback()  # Rollback transaction in case of error
+        conn.rollback()  
         print("Error saving game state:", e)
 
 
 def main():
     global score
-    pygame.init()  # Initialize Pygame
-    pygame.font.init()  # Initialize Pygame's font system
+    pygame.init() 
+    pygame.font.init()  
     conn = connect_to_db()
     if conn:
         create_tables(conn)
@@ -141,11 +141,11 @@ def main():
                 game_over_surface_l = my_font.render('level: ' + str(level), True, white)
                 game_window.blit(game_over_surface_l, (180, 300))
                 P = False
-                pygame.display.update()
-                time.sleep(2)
+                pygame.display.flip()
+                time.sleep(1)
 
             def show_score(color, font, size):
-                pygame.font.init()  # Initialize the font module
+                pygame.font.init() 
                 score_font = pygame.font.SysFont(font, size)
                 score_surface = score_font.render('Score : ' + str(max(f_score, score)), True, color)
                 game_window.blit(score_surface, (10, 10))
@@ -153,7 +153,7 @@ def main():
             def show_level(color, font, size):
                 score_font = pygame.font.SysFont(font, size)
                 score_surface = score_font.render('Level : ' + str(level), True, color)
-                game_window.blit(score_surface, (10, 40))  # Adjust the position as needed
+                game_window.blit(score_surface, (10, 40)) 
 
             def game_over(conn, username, score, level):
                 game_window.fill(black)
@@ -175,12 +175,10 @@ def main():
                 time.sleep(2)
                 pygame.quit()
 
-                # Save score and level to the database
                 cur = conn.cursor()
                 cur.execute("INSERT INTO user_score (user_id, username, score, level) VALUES (%s,%s, %s, %s)", (user_id,username, score, level))
                 conn.commit()
 
-            # Main game loop
             while True:
                 if score >= 20:
                     P = True
@@ -306,7 +304,6 @@ def main():
 
                 pygame.display.update()
                 fps.tick(snake_speed)
-
         save_game_state(conn, username, user_id, score)
 
 

@@ -1,5 +1,5 @@
 import psycopg2
-import csv
+import csv, sqlite3
 
 def connect_to_db():
     try:
@@ -53,7 +53,7 @@ def upload_from_csv(conn, filename):
         cur = conn.cursor()
         with open(filename, 'r') as f:
             reader = csv.reader(f)
-            next(reader) 
+            next(reader)
             for row in reader:
                 cur.execute(
                     "INSERT INTO PhoneBook (first_name, last_name, phone_number) VALUES (%s, %s, %s)",
@@ -64,6 +64,7 @@ def upload_from_csv(conn, filename):
         print("Data uploaded from CSV successfully.")
     except (psycopg2.Error, FileNotFoundError) as e:
         print("Error uploading data from CSV:", e)
+
 
 def insert_from_console(conn):
     try:
@@ -143,9 +144,10 @@ def main():
     conn = connect_to_db()
     if conn:
         create_phonebook_table(conn)
-        upload_from_csv(conn, 'contacts.csv')
+        upload_from_csv(conn, 'Tsis11/contacts2.csv')
         insert_from_console(conn)
         print("Do you want to change the first name? YES/NO")
+        
         a = input()
         if a == "YES":
             update_data_name(conn)
