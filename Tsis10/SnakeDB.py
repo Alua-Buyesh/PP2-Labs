@@ -250,7 +250,7 @@ def main():
                 if level == 1:
                     if P:
                         level1()
-
+                    P=False
                     pygame.draw.rect(game_window, white, wall_rect1)
                     if snake_position[0] == wall_rect1.x and wall_rect1.y <= snake_position[1] <= wall_rect1.y + wall_rect1.height:
                         game_over(conn, username, score, level)
@@ -258,7 +258,7 @@ def main():
                 if level == 2:
                     if P:
                         level1()
-
+                    P=False
                     if snake_position[0] == wall_rect1.x and wall_rect1.y <= snake_position[1] <= wall_rect1.y + wall_rect1.height:
                         game_over(conn, username, score, level)
                     if snake_position[0] == wall_rect2.x and wall_rect2.y <= snake_position[1] <= wall_rect2.y + wall_rect2.height:
@@ -270,7 +270,7 @@ def main():
                 if level == 3:
                     if P:
                         level1()
-
+                    P=False
                     if snake_position[0] == wall_rect1.x and wall_rect1.y <= snake_position[1] <= wall_rect1.y + wall_rect1.height:
                         game_over(conn, username, score, level)
                     if snake_position[0] == wall_rect2.x and wall_rect2.y <= snake_position[1] <= wall_rect2.y + wall_rect2.height:
