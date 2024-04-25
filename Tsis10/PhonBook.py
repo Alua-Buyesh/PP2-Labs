@@ -1,5 +1,5 @@
 import psycopg2
-import csv, sqlite3
+import csv
 
 def connect_to_db():
     try:
