@@ -25,7 +25,7 @@ def get_next_id(conn):
         if not ids:
             return 1
 
-        next_id = min(set(range(1, max(ids) + 2)) - set(ids))
+        next_id = min(set(range(1, max(ids)+1)) - set(ids))
         return next_id
     except psycopg2.Error as e:
         print("Error getting next ID:", e)
