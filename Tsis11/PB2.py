@@ -16,11 +16,11 @@ def connect_to_db():
         return None
     
 # Procedure to insert or update user
-def insert_or_update_user(conn, full_name, phone_number):
+def insert_or_update_user(conn, first_name, last_name, phone_number):
     try:
         cur = conn.cursor()
         cur.execute("""
-            INSERT INTO phonebook (full_name, phone_number) 
+            INSERT INTO PhoneBook (first_name, last_name, phone_number) 
             VALUES (%s, %s)
             ON CONFLICT (full_name) 
             DO UPDATE SET phone_number = EXCLUDED.phone_number;
@@ -63,12 +63,12 @@ def search_records(conn, pattern):
 # Main function
 def main():
     # Connect to the database
-    conn = connect_to_database()
+    conn = connect_to_db()
     if conn is None:
         return
 
     # Insert or update user
-    insert_or_update_user(conn, "John Doe", "1234567890")
+    insert_or_update_user(conn, "John", " Doe", "1234567890")
 
     # Search for records
     search_records(conn, "John")
