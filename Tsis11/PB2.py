@@ -1,4 +1,5 @@
 import psycopg2
+import csv
 
 def connect_to_db():
     try:
@@ -14,6 +15,20 @@ def connect_to_db():
         print("Error connecting to the database:", e)
         return None
 
+def upload_from_csv(conn, filename):
+    try:
+        cur = conn.cursor()
+        with open(filename, 'r') as f:
+            reader = csv.reader(f)
+            next(reader)
+            for row in reader:
+                if len(row[2])<12:
+                    insert_or_update_user(conn,row[0],row[1],row[2])
+        conn.commit()
+        cur.close()
+        print("Data uploaded from CSV successfully.")
+    except (psycopg2.Error, FileNotFoundError) as e:
+        print("Error uploading data from CSV:", e)
 
 def create_phonebook_table(conn):
     try:
@@ -23,7 +38,7 @@ def create_phonebook_table(conn):
                 id SERIAL PRIMARY KEY,
                 first_name VARCHAR(50),
                 last_name VARCHAR(50),
-                phone_number VARCHAR(15),
+                phone_number VARCHAR(11),
                 UNIQUE (first_name, last_name)
             );
         """)
@@ -63,7 +78,8 @@ def insert_from_console(conn):
         first_name = input("Enter first name: ")
         last_name = input("Enter last name: ")
         phone_number = input("Enter phone number:")
-        insert_or_update_user(conn, first_name, last_name, phone_number)
+        if first_name and last_name and phone_number:
+            insert_or_update_user(conn, first_name, last_name, phone_number)
     except psycopg2.Error as e:
         print("Error inserting/updating data from console:", e)
 
@@ -111,11 +127,12 @@ def show_table(conn):
 
 def main():
     conn = connect_to_db()
-    show_table(conn)
+    
+    
     if conn:
         create_phonebook_table(conn)
         insert_from_console(conn)
-
+        upload_from_csv(conn, 'Tsis10/contacts2.csv')
         print("Do you want to delete a name? YES/NO")
         c = input()
         if c == "YES":
@@ -127,7 +144,7 @@ def main():
         if c == "YES":
             username = input("Enter the first name or last name: ")
             search_records(conn, username)
-
+        show_table(conn)
         conn.close()
 
             
