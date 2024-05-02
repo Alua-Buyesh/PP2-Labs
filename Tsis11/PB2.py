@@ -69,7 +69,7 @@ def insert_or_update_user(conn, first_name, last_name, phone_number):
 
         """)
         conn.commit()
-        print("Error fixed. Try again")
+        insert_or_update_user(conn, first_name, last_name, phone_number)
 
 
 
