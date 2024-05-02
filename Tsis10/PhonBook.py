@@ -18,14 +18,14 @@ def connect_to_db():
 def get_next_id(conn):
     try:
         cur = conn.cursor()
-        cur.execute("SELECT id FROM PhoneBook WHERE id IS NOT NULL")
+        cur.execute("SELECT id FROM phonebook WHERE id IS NOT NULL")
         ids = [row[0] for row in cur.fetchall()]
         cur.close()
 
         if not ids:
             return 1
 
-        next_id = min(set(range(1, max(ids)+1)) - set(ids))
+        next_id = min(set(range(1, max(ids)+2)) - set(ids))
         return next_id
     except psycopg2.Error as e:
         print("Error getting next ID:", e)
@@ -144,7 +144,7 @@ def main():
     conn = connect_to_db()
     if conn:
         create_phonebook_table(conn)
-        upload_from_csv(conn, 'Tsis11/contacts2.csv')
+        upload_from_csv(conn, 'contacts2.csv')
         insert_from_console(conn)
         print("Do you want to change the first name? YES/NO")
         
